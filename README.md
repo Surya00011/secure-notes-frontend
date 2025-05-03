@@ -24,9 +24,4 @@ This is the React-based frontend for the **Secure Notes App**, a secure, user-fr
 - Node.js (v18 or above)
 - npm or yarn
 
-### Installation
 
-```bash
-git clone https://github.com/<your-username>/secure-notes-frontend.git
-cd secure-notes-frontend
-npm install
