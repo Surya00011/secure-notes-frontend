@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import { loginService } from "../services/authService";
 import { Button, Form, Alert, Card } from "react-bootstrap";
 import { MdLockPerson } from "react-icons/md";
@@ -51,9 +51,11 @@ const Login = () => {
             </Alert>
           )}
 
+
           {/* Login Form */}
           <Form onSubmit={handleLogin}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
+              <p style={{textAlign:"center"}}>Sign up with Email</p>
               <Form.Label>Email address</Form.Label>
               <Form.Control
                 type="email"
@@ -76,6 +78,14 @@ const Login = () => {
             <Button variant="primary" type="submit" className="w-100 mb-3">
               Login
             </Button>
+            <div className="d-flex justify-content-between mb-3">
+                <Link to="/forgot-password" className="text-decoration-none">
+                 Forgot Password?
+                </Link>
+               <Link to="/register" className="text-decoration-none">
+                 Create Account
+               </Link>
+            </div>
 
             <div className="text-center mb-3">
               <p>Or sign in with</p>
