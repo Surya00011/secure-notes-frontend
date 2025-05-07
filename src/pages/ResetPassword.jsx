@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Card, Form, Button, Alert } from 'react-bootstrap';
+import { Card, Form, Button, Alert, InputGroup } from 'react-bootstrap';
 import { resetPasswordService } from '../services/authService';
 import { useLocation } from 'react-router-dom';
+import { Eye, EyeSlash } from 'react-bootstrap-icons';
+import { MdLockPerson } from 'react-icons/md';
 
 const ResetPassword = () => {
   const [message, setMessage] = useState("");
@@ -10,6 +12,9 @@ const ResetPassword = () => {
   const confirmPasswordRef = useRef();
   const location = useLocation();
   const [token, setToken] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -34,7 +39,7 @@ const ResetPassword = () => {
     }
 
     try {
-      const response = await resetPasswordService(password, token); // ✅ pass password + token
+      const response = await resetPasswordService(password, token); 
       setMessage(response.message);
       setErrorMessage(""); 
     } catch (error) {
@@ -45,29 +50,44 @@ const ResetPassword = () => {
   return (
     <div className='d-flex justify-content-center align-items-center min-vh-100 bg-light'>
       <Card style={{ width: '24rem' }} className='p-4 shadow'>
-        <Card.Title className='text-center mb-3'>Reset Password</Card.Title>
+        <div className="text-center mb-1" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                            <h1 className="text-dark" style={{ fontSize: "1rem", fontWeight: "bold" }}>Secure Notes <MdLockPerson /></h1>
+        </div>
+        <Card.Title className='text-center mb-3'style={{fontSize:"2rem"}} >Reset Password</Card.Title>
         <Card.Body>
           {error && <Alert variant="danger">{error}</Alert>}
           {message && <Alert variant="success">{message}</Alert>}
           <Form onSubmit={handleResetPassword}>
             <Form.Group className='mb-3'>
               <Form.Label>New Password:</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Password@99"
-                ref={passwordRef}
-                required
-              />
+              <InputGroup>
+                <Form.Control
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password@99"
+                  ref={passwordRef}
+                  required
+                />
+                <Button variant="outline-secondary" onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <EyeSlash /> : <Eye />}
+                </Button>
+              </InputGroup>
             </Form.Group>
+
             <Form.Group className='mb-4'>
               <Form.Label>Confirm Password:</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Password@99"
-                ref={confirmPasswordRef}
-                required
-              />
+              <InputGroup>
+                <Form.Control
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Password@99"
+                  ref={confirmPasswordRef}
+                  required
+                />
+                <Button variant="outline-secondary" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                  {showConfirmPassword ? <EyeSlash /> : <Eye />}
+                </Button>
+              </InputGroup>
             </Form.Group>
+
             <Button type="submit" variant="primary" className="w-100">
               Reset Password
             </Button>

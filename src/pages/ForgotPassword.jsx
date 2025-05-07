@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Alert, Button, Card, Form } from "react-bootstrap";
 import { forgotPasswordService } from "../services/authService";
+import { MdLockPerson } from "react-icons/md";
 
 const ForgotPassword = () => {
   const emailRef = useRef();
@@ -22,30 +23,40 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
-      <Card style={{ width: "22rem" }} className="p-3 shadow-lg">
-        <Card.Body>
-          <Card.Title className="mb-3 text-center">Forgot Password</Card.Title>
+    <div className="bg-light min-vh-100 d-flex flex-column">
+      
+      
+      {/* Form Section */}
+      <div className="d-flex justify-content-center align-items-center flex-grow-1 mt-3">
+        <Card style={{ width: "22rem" }} className="p-3 shadow-lg">
 
-          {error && <Alert variant="danger">{error}</Alert>}
-          {message && <Alert variant="success">{message}</Alert>}
+        <div className="text-center mb-1" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                    <h1 className="text-dark" style={{ fontSize: "1rem", fontWeight: "bold" }}>Secure Notes <MdLockPerson /></h1>
+        </div>
+          <Card.Body> 
+            
+            <Card.Title className="mb-3 text-center" style={{fontSize:"2rem"}}>Forgot Password?</Card.Title>
 
-          <Form onSubmit={handleForgotPassword}>
-            <Form.Group className="mb-3">
-              <Form.Label>Enter Your Email</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                ref={emailRef}
-                required
-              />
-            </Form.Group>
-            <Button type="submit" variant="primary" className="w-100">
-              Send Reset Link
-            </Button>
-          </Form>
-        </Card.Body>
-      </Card>
+            {error && <Alert variant="danger">{error}</Alert>}
+            {message && <Alert variant="success">{message}</Alert>}
+
+            <Form onSubmit={handleForgotPassword}>
+              <Form.Group className="mb-3">
+                <Form.Label>Enter Your Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter email"
+                  ref={emailRef}
+                  required
+                />
+              </Form.Group>
+              <Button type="submit" variant="primary" className="w-100">
+                Send Reset Link
+              </Button>
+            </Form>
+          </Card.Body>
+        </Card>
+      </div>
     </div>
   );
 };
