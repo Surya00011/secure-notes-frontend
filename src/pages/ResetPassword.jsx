@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Card, Form, Button, Alert, InputGroup } from 'react-bootstrap';
 import { resetPasswordService } from '../services/authService';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import { MdLockPerson } from 'react-icons/md';
+import {Link} from 'react-router-dom';
 
 const ResetPassword = () => {
   const [message, setMessage] = useState("");
@@ -59,7 +60,7 @@ const ResetPassword = () => {
           {message && <Alert variant="success">{message}</Alert>}
           <Form onSubmit={handleResetPassword}>
             <Form.Group className='mb-3'>
-              <Form.Label>New Password:</Form.Label>
+              <Form.Label>New Password</Form.Label>
               <InputGroup>
                 <Form.Control
                   type={showPassword ? "text" : "password"}
@@ -74,7 +75,7 @@ const ResetPassword = () => {
             </Form.Group>
 
             <Form.Group className='mb-4'>
-              <Form.Label>Confirm Password:</Form.Label>
+              <Form.Label>Confirm Password</Form.Label>
               <InputGroup>
                 <Form.Control
                   type={showConfirmPassword ? "text" : "password"}
@@ -92,6 +93,13 @@ const ResetPassword = () => {
               Reset Password
             </Button>
           </Form>
+        </Card.Body>
+        <Card.Body>
+        <div className="d-flex justify-content-center">
+                <Link to="/" className="text-decoration-none">
+                 Back to Login
+                </Link>       
+           </div>
         </Card.Body>
       </Card>
     </div>

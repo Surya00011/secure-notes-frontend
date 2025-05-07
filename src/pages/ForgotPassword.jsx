@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Alert, Button, Card, Form } from "react-bootstrap";
 import { forgotPasswordService } from "../services/authService";
 import { MdLockPerson } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 const ForgotPassword = () => {
   const emailRef = useRef();
@@ -54,6 +55,13 @@ const ForgotPassword = () => {
                 Send Reset Link
               </Button>
             </Form>
+          </Card.Body>
+          <Card.Body>
+          <div className="d-flex justify-content-center">
+                <Link to="/" className="text-decoration-none">
+                 Back to Login
+                </Link>       
+           </div>
           </Card.Body>
         </Card>
       </div>
