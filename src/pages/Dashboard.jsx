@@ -1,7 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import { createTheme } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ProfileInfo from '../components/ProfileInfo';
@@ -9,6 +8,11 @@ import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { useDemoRouter } from '@toolpad/core/internal';
 import { MdLockPerson, MdPersonOutline } from 'react-icons/md';
+import { Fab } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import NoteDashboard from '../components/NoteDashboard';
+import NoteFormDialog from '../components/NoteFormDialog';
+import UpdateNoteFormDialog from '../components/UpdateNoteFormDialog';
 
 const NAVIGATION = [
   {
@@ -19,7 +23,7 @@ const NAVIGATION = [
   {
     segment: 'profile',
     title: 'Profile',
-    icon: <MdPersonOutline/>,
+    icon: <MdPersonOutline />,
   },
 ];
 
@@ -40,23 +44,68 @@ const theme = createTheme({
 });
 
 function DashboardContent({ pathname }) {
+  const [openForm, setOpenForm] = React.useState(false);
+  const [openUpdateDialog, setOpenUpdateDialog] = React.useState(false);
+  const [selectedNote, setSelectedNote] = React.useState(null);
+  const [reloadFlag, setReloadFlag] = React.useState(false);
+
+  const handleNoteCreated = () => {
+    setReloadFlag((prev) => !prev);
+  };
+
+  const handleNoteUpdated = () => {
+    setReloadFlag((prev) => !prev);
+    setOpenUpdateDialog(false);
+    setSelectedNote(null);
+  };
+
+  const handleEditNote = (note) => {
+    setSelectedNote(note);
+    setOpenUpdateDialog(true);
+  };
+
   return (
-    <Box
-      sx={{
-        py: 4,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
-      }}
-    >
-     {pathname === '/dashboard' && (
-        <Typography>Dashboard content for {pathname}</Typography>
+    <Box sx={{ py: 4, display: 'flex', flexDirection: 'column' }}>
+      {pathname === '/dashboard' && (
+        <>
+          <NoteDashboard
+            reloadTrigger={reloadFlag}
+            onEditNote={handleEditNote}
+          />
+
+          <NoteFormDialog
+            open={openForm}
+            onClose={() => setOpenForm(false)}
+            onNoteCreated={handleNoteCreated}
+          />
+
+          <UpdateNoteFormDialog
+            open={openUpdateDialog}
+            onClose={() => setOpenUpdateDialog(false)}
+            note={selectedNote}
+            onNoteUpdated={handleNoteUpdated}
+          />
+
+          <Fab
+            color="primary"
+            size="medium"
+            aria-label="add"
+            sx={{
+              position: 'fixed',
+              bottom: 20,
+              right: 20,
+              zIndex: 1000,
+            }}
+            onClick={() => setOpenForm(true)}
+          >
+            <AddIcon />
+          </Fab>
+        </>
       )}
 
       {pathname === '/profile' && <ProfileInfo />}
     </Box>
-  )
+  );
 }
 
 DashboardContent.propTypes = {
@@ -72,7 +121,7 @@ function Dashboard(props) {
     <AppProvider
       navigation={NAVIGATION}
       branding={{
-        logo: <MdLockPerson/>,
+        logo: <MdLockPerson />,
         title: 'Secure Notes',
         homeUrl: '/dashboard',
       }}

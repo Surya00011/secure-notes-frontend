@@ -6,14 +6,16 @@ import Dashboard from './pages/Dashboard'
 import ForgotPassword from './pages/ForgotPassword';
 import Register from './pages/Register';
 import ResetPassword from './pages/ResetPassword';
+import { AuthProvider } from './context/AuthContext';
 
 
 function App() {
   
 
   return (
-   
+       
            <Router>
+              <AuthProvider>
                 <Routes>
                   <Route path="/" element={<Login/>}/>
                   <Route path="/dashboard" element={<Dashboard/>}/>
@@ -22,6 +24,7 @@ function App() {
                   <Route path="/reset-password" element={<ResetPassword/>}/>
                   <Route path="/dashboard" element={<Dashboard/>}/>
                 </Routes>
+              </AuthProvider>
           </Router>
   
    
