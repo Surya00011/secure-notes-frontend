@@ -31,7 +31,8 @@ const Login = () => {
   };
 
   const handleOAuthLogin = (provider) => {
-    window.location.href = `http://localhost:8080/oauth2/authorization/${provider}`;
+    const API_URL = `${import.meta.env.VITE_BACKEND_API_URL}`;
+    window.location.href = `${API_URL}/oauth2/authorization/${provider}`;
   };
 
   return (

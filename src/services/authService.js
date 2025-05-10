@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080/auth";
+const BASE_URL = `${import.meta.env.VITE_BACKEND_API_URL}/auth`;
 
 // Utility to get token from sessionStorage
 const getToken = () => sessionStorage.getItem("token");
