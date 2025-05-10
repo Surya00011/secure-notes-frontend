@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   Dialog,
   DialogActions,
@@ -10,29 +10,29 @@ import {
 import { updateNote } from '../services/noteService';
 
 const UpdateNoteFormDialog = ({ open, onClose, onNoteUpdated, note }) => {
-  const [title, setTitle] = useState('');
-  const [noteContent, setNoteContent] = useState('');
-  const [deadline, setDeadline] = useState('');
+  const titleRef = useRef();
+  const noteContentRef = useRef();
+  const deadlineRef = useRef();
 
   useEffect(() => {
     if (note) {
-      setTitle(note.title);             // ✅ use `title` from backend
-      setNoteContent(note.note);
-      setDeadline(note.deadline);
+      if (titleRef.current) titleRef.current.value = note.title ?? '';
+      if (noteContentRef.current) noteContentRef.current.value = note.note ?? '';
+      if (deadlineRef.current) deadlineRef.current.value = note.deadline ?? '';
     }
   }, [note]);
 
   const handleUpdateNote = async () => {
     const updatedNote = {
-      title,                            // ✅ send `title` not `noteTitle`
-      note: noteContent,
-      deadline,
+      title: titleRef.current.value,
+      note: noteContentRef.current.value,
+      deadline: deadlineRef.current.value,
     };
 
     try {
-      await updateNote(note.noteId, updatedNote); // Update the note
-      onNoteUpdated(); // Callback to reload notes
-      onClose();       // Close the dialog
+      await updateNote(note.noteId, updatedNote);
+      onNoteUpdated();
+      onClose();
     } catch (error) {
       console.error('Error updating note:', error);
     }
@@ -46,8 +46,8 @@ const UpdateNoteFormDialog = ({ open, onClose, onNoteUpdated, note }) => {
           label="Title"
           fullWidth
           margin="normal"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          inputRef={titleRef}
+          defaultValue={note?.title ?? ''}
         />
         <TextField
           label="Note"
@@ -55,16 +55,16 @@ const UpdateNoteFormDialog = ({ open, onClose, onNoteUpdated, note }) => {
           margin="normal"
           multiline
           rows={4}
-          value={noteContent}
-          onChange={(e) => setNoteContent(e.target.value)}
+          inputRef={noteContentRef}
+          defaultValue={note?.note ?? ''}
         />
         <TextField
           label="Deadline"
           fullWidth
           margin="normal"
           type="date"
-          value={deadline}
-          onChange={(e) => setDeadline(e.target.value)}
+          inputRef={deadlineRef}
+          defaultValue={note?.deadline ?? ''}
           InputLabelProps={{
             shrink: true,
           }}

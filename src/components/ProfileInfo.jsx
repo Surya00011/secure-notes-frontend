@@ -31,9 +31,7 @@ const ProfileInfo = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      
       await deleteAccountService();
-
       setShowDeleteDialog(false);
       setShowAlert(true);
 
@@ -52,9 +50,8 @@ const ProfileInfo = () => {
   };
 
   return (
-    <div className='d-flex justify-content-center'>
-    <Box sx={{ display: 'flex', justifyContent: 'left', mt: 5 }}>
-      <Card sx={{ width: 400, boxShadow: 3, borderRadius: 3 }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5, px: 2, width: '100%' }}>
+      <Card sx={{ width: '100%', maxWidth: 400, boxShadow: 3, borderRadius: 3 }}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: '#1976d2' }}>
@@ -66,18 +63,34 @@ const ProfileInfo = () => {
         />
         <Divider />
         <CardContent>
-         
-          <Typography variant="h6" gutterBottom>{profile.email}</Typography>
-     
-          <Typography variant="h6" gutterBottom>{profile.username}</Typography>
+          <Typography variant="h6" gutterBottom>
+            <b>Email:</b> {profile.email}
+          </Typography>
+          <Typography variant="h6" gutterBottom>
+            <b>Username:</b> {profile.username}
+          </Typography>
 
           <Divider sx={{ my: 2 }} />
 
-          <Box display="flex" gap={2}>
-            <Button variant="danger" onClick={() => setShowDeleteDialog(true)}>
+          <Box
+            display="flex"
+            flexDirection={{ xs: 'column', sm: 'row' }}
+            gap={2}
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Button
+              variant="danger"
+              onClick={() => setShowDeleteDialog(true)}
+              className="w-100"
+            >
               Delete Account
             </Button>
-            <Button variant="primary" onClick={() => setShowLogoutDialog(true)}>
+            <Button
+              variant="primary"
+              onClick={() => setShowLogoutDialog(true)}
+              className="w-100"
+            >
               Logout
             </Button>
           </Box>
@@ -126,7 +139,6 @@ const ProfileInfo = () => {
         </DialogActions>
       </Dialog>
     </Box>
-    </div>
   );
 };
 
