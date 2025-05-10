@@ -171,7 +171,7 @@ const Register = () => {
           </Form>
 
           <div className="d-flex justify-content-center">
-            <Link to="/" className="text-decoration-none">
+            <Link to="/login" className="text-decoration-none">
               Back to login
             </Link>
           </div>

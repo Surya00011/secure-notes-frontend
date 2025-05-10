@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.removeItem("token");
     setToken(null);
     setProfile(null);
-    navigate("/");
+    navigate("/login");
   };
 
   const value = {
