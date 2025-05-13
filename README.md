@@ -2,6 +2,9 @@
 
 This is the React-based frontend for the **Secure Notes App**, a secure, user-friendly note-taking application that integrates advanced authentication, email notifications, and encryption for personal notes.
 
+
+## The application is now live at: https://secure-notes-app-01.netlify.app
+
 ## 🔐 Features
 
 - 📝 Create, update, delete personal notes
@@ -13,7 +16,7 @@ This is the React-based frontend for the **Secure Notes App**, a secure, user-fr
 
 ## 📦 Tech Stack
 
-- **Frontend**: React.js, Tailwind CSS, Axios, React Router
+- **Frontend**: React.js, Bootstrap, MaterialUI, Axios, React Router
 - **Authentication**: OAuth2 (GitHub)
 - **Backend**: Spring Boot (see [API docs](https://surya00011.github.io/secure-notes-api-docs/))
 
