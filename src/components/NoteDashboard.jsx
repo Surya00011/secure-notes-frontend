@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Grid, CircularProgress, Typography } from '@mui/material';
-import NoteCard from './NoteCard';
-import { getAllNotes } from '../services/noteService';
+import React, { useEffect, useState } from "react";
+import { Box, Grid, CircularProgress, Typography } from "@mui/material";
+import NoteCard from "./NoteCard";
+import { getAllNotes } from "../services/noteService";
 
 const NoteDashboard = ({ reloadTrigger, onEditNote }) => {
   const [notes, setNotes] = useState([]);
@@ -10,15 +10,16 @@ const NoteDashboard = ({ reloadTrigger, onEditNote }) => {
   const fetchNotes = async () => {
     try {
       const response = await getAllNotes();
-      setNotes(response.data);
+      setNotes(response.data || []); // safety fallback
     } catch (error) {
-      console.error('Error fetching notes:', error);
+      console.error("Error fetching notes:", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    setLoading(true); // reset loader each time
     fetchNotes();
   }, [reloadTrigger]);
 
@@ -28,7 +29,7 @@ const NoteDashboard = ({ reloadTrigger, onEditNote }) => {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
         <CircularProgress />
       </Box>
     );
@@ -46,7 +47,7 @@ const NoteDashboard = ({ reloadTrigger, onEditNote }) => {
             <Grid item xs={12} sm={6} md={4} key={note.noteId}>
               <NoteCard
                 note={note}
-                onEdit={() => onEditNote(note)} // Call parent handler
+                onEdit={() => onEditNote(note)}
                 onDelete={handleNoteDeleted}
               />
             </Grid>

@@ -10,23 +10,29 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
 
     try {
       const response = await loginService({ email, password });
       if (response.token) {
-        sessionStorage.setItem("token", response.token); 
+        sessionStorage.setItem("token", response.token);
         navigate("/dashboard");
       } else {
         setErrorMessage("Network Error");
       }
     } catch (error) {
-      setErrorMessage("Login Failed. " + (error.response?.data?.message || error.message));
+      setErrorMessage(
+        "Login Failed. " + (error.response?.data?.message || error.message)
+      );
       console.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -37,16 +43,32 @@ const Login = () => {
 
   return (
     <div className="d-flex flex-column justify-content-center align-items-center min-vh-100 bg-light">
-      <div className="text-center mb-4" style={{ fontFamily: "'Poppins', sans-serif" }}>
-        <h1 className="text-dark" style={{ fontSize: "3rem", fontWeight: "bold" }}>
+      <div
+        className="text-center mb-4"
+        style={{ fontFamily: "'Poppins', sans-serif" }}
+      >
+        <h1
+          className="text-dark"
+          style={{ fontSize: "3rem", fontWeight: "bold" }}
+        >
           Secure Notes <MdLockPerson />
         </h1>
       </div>
 
-      <Card style={{ width: "100%", maxWidth: "400px", boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)" }}>
+      <Card
+        style={{
+          width: "100%",
+          maxWidth: "400px",
+          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+        }}
+      >
         <Card.Body>
           {errorMessage && (
-            <Alert variant="danger" onClose={() => setErrorMessage("")} dismissible>
+            <Alert
+              variant="danger"
+              onClose={() => setErrorMessage("")}
+              dismissible
+            >
               <Alert.Heading>Login Failed</Alert.Heading>
               <p>{errorMessage}</p>
             </Alert>
@@ -56,29 +78,46 @@ const Login = () => {
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <p style={{ textAlign: "center" }}>Sign in with Email</p>
               <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" ref={emailRef} required />
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                ref={emailRef}
+                required
+              />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" ref={passwordRef} required />
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                ref={passwordRef}
+                required
+              />
             </Form.Group>
 
             <Button variant="primary" type="submit" className="w-100 mb-3">
-              Login
+              {loading ? "Logging in..." : "Login"}
             </Button>
 
             <div className="d-flex justify-content-between mb-3">
-              <Link to="/forgot-password" className="text-decoration-none">Forgot Password?</Link>
-              <Link to="/register" className="text-decoration-none">Create Account</Link>
+              <Link to="/forgot-password" className="text-decoration-none">
+                Forgot Password?
+              </Link>
+              <Link to="/register" className="text-decoration-none">
+                Create Account
+              </Link>
             </div>
 
             <div className="text-center mb-3">
               <p>Or sign in with</p>
-              <Button variant="light" onClick={() => handleOAuthLogin("github")} >
+              <Button
+                variant="light"
+                onClick={() => handleOAuthLogin("github")}
+              >
                 <i className="ci ci-github"></i> GitHub
               </Button>
-              <Button variant="light" onClick={() => handleOAuthLogin("google")}>
+              <Button variant="light">
                 <i className="ci ci-google"></i> Google
               </Button>
             </div>

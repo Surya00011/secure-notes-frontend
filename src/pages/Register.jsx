@@ -1,13 +1,20 @@
-import { React, useRef, useState } from 'react';
-import { Button, Card, Form, Alert } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { MdLockPerson } from 'react-icons/md';
-import { sendOtpService, verifyOtpService, registerService } from '../services/authService';
+import { React, useRef, useState } from "react";
+import { Button, Card, Form, Alert } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { MdLockPerson } from "react-icons/md";
+import {
+  sendOtpService,
+  verifyOtpService,
+  registerService,
+} from "../services/authService";
 
 const Register = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isMailVerified, setMailVerified] = useState(false);
+  const [registering, setRegistering] = useState(false);
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
 
   const emailRef = useRef();
   const otpRef = useRef();
@@ -16,6 +23,7 @@ const Register = () => {
 
   const handleOtp = async (e) => {
     e.preventDefault();
+    setOtpSent(true);
     const email = emailRef.current.value;
     setMessage("");
     setError("");
@@ -29,12 +37,18 @@ const Register = () => {
       const response = await sendOtpService(email);
       setMessage(response.data || "OTP sent to your email.");
     } catch (error) {
-      setError("Failed to send OTP. " + (error.response?.data?.message || error.message));
+      setError(
+        "Failed to send OTP. " +
+          (error.response?.data?.message || error.message)
+      );
+    } finally {
+      setOtpSent(false);
     }
   };
 
   const handelOtpVerification = async (e) => {
     e.preventDefault();
+    setVerifyingOtp(true);
     const otp = otpRef.current.value;
     const email = emailRef.current.value;
     setError("");
@@ -54,12 +68,18 @@ const Register = () => {
         setError("Invalid OTP.");
       }
     } catch (error) {
-      setError("Failed to verify OTP. " + (error.response?.data?.message || error.message));
+      setError(
+        "Failed to verify OTP. " +
+          (error.response?.data?.message || error.message)
+      );
+    } finally {
+      setVerifyingOtp(false);
     }
   };
 
   const handleRegistration = async (e) => {
     e.preventDefault();
+    setRegistering(true);
     setError("");
     setMessage("");
 
@@ -77,25 +97,46 @@ const Register = () => {
       setMessage("Registration successful. Please log in.");
       setMailVerified(false);
     } catch (error) {
-      setError("Failed to register. " + (error.response?.data?.message || error.message));
+      setError(
+        "Failed to register. " +
+          (error.response?.data?.message || error.message)
+      );
+    } finally {
+      setRegistering(false);
     }
   };
 
   return (
     <div className="d-flex flex-column justify-content-center align-items-center min-vh-100 bg-light">
-      <div className="text-center mb-1" style={{ fontFamily: "'Poppins', sans-serif" }}>
-        <h1 className="text-dark" style={{ fontSize: "3rem", fontWeight: "bold" }}>
+      <div
+        className="text-center mb-1"
+        style={{ fontFamily: "'Poppins', sans-serif" }}
+      >
+        <h1
+          className="text-dark"
+          style={{ fontSize: "3rem", fontWeight: "bold" }}
+        >
           Secure Notes <MdLockPerson />
         </h1>
       </div>
 
-      <Card style={{ width: '24rem' }} className="p-3 shadow">
-        <Card.Title style={{ fontSize: "2rem", padding: "6px", textAlign: "center" }}>
+      <Card style={{ width: "24rem" }} className="p-3 shadow">
+        <Card.Title
+          style={{ fontSize: "2rem", padding: "6px", textAlign: "center" }}
+        >
           Sign Up
         </Card.Title>
 
-        {message && <Alert variant="success" dismissible>{message}</Alert>}
-        {error && <Alert variant="danger" dismissible>{error}</Alert>}
+        {message && (
+          <Alert variant="success" dismissible>
+            {message}
+          </Alert>
+        )}
+        {error && (
+          <Alert variant="danger" dismissible>
+            {error}
+          </Alert>
+        )}
 
         <Card.Body>
           <Form onSubmit={handleRegistration}>
@@ -113,7 +154,7 @@ const Register = () => {
                   variant="primary"
                   style={{ marginLeft: "10px", whiteSpace: "nowrap" }}
                 >
-                  Send OTP
+                  {otpSent ? "Sending OTP..." : "Send OTP"}
                 </Button>
               </div>
             </Form.Group>
@@ -131,10 +172,9 @@ const Register = () => {
                   variant="primary"
                   style={{ marginLeft: "10px", whiteSpace: "nowrap" }}
                 >
-                  Verify OTP
+                  {verifyingOtp ? "Verifying..." : "Verify OTP"}
                 </Button>
               </div>
-              
             </Form.Group>
 
             <hr />
@@ -161,12 +201,8 @@ const Register = () => {
               </div>
             </Form.Group>
 
-            <Button
-              type="submit"
-              variant="primary"
-              className="w-100 mb-3"
-            >
-              Sign up
+            <Button type="submit" variant="primary" className="w-100 mb-3">
+              {registering ? "Registering..." : "Register"}
             </Button>
           </Form>
 
