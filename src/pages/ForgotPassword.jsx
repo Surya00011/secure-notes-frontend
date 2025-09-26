@@ -74,7 +74,7 @@ const ForgotPassword = () => {
           </Card.Body>
           <Card.Body>
             <div className="d-flex justify-content-center">
-              <Link to="/login" className="text-decoration-none">
+              <Link to="/" className="text-decoration-none">
                 Back to Login
               </Link>
             </div>
